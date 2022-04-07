@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # modules
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_yasg',
 
 ]
 
@@ -96,7 +97,7 @@ WSGI_APPLICATION = 'shop.wsgi.application'
 # }
 DATABASES = {
     'default': dj_database_url.config(
-        default=config('DATABASE_URl')
+        default=config('DATABASE_URL')
     )
 }
 
@@ -142,13 +143,19 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
 
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication'
-    ]
+    ],
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 2,
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated' # AllowAny
+#     ],
 }
 
 
