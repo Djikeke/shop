@@ -12,9 +12,9 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.viewsets import ModelViewSet, GenericViewSet, ViewSet
 
 from applications.product.filters import ProductFilter
-from applications.product.models import Product, Rating
+from applications.product.models import Product, Rating, Categore
 from applications.product.permissions import IsAdmin, IsAuthor
-from applications.product.serializers import ProductSerializer, RatingSerializers
+from applications.product.serializers import ProductSerializer, RatingSerializers, CategorySerializers
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -36,6 +36,8 @@ class ProductViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
             permissions = []
+        elif self.action == 'rating':
+            permissions = [IsAuthenticated]
         else:
             permissions = [IsAuthenticated]
         return [permission() for permission in permissions]
@@ -55,6 +57,23 @@ class ProductViewSet(ModelViewSet):
             obj = Rating(owner=request.user, product=self.get_object(), rating=request.data['rating'])
         obj.save()
         return Response(request.data, status=status.HTTP_201_CREATED)
+
+
+class CategoryListCreateView(ListCreateAPIView):
+    queryset = Categore.objects.all()
+    serializer_class = CategorySerializers
+    permission_classes = [IsAuthenticated]
+
+
+class CategoryRetriveDeleteUpdateView(RetrieveUpdateDestroyAPIView):
+    lookup_field = 'slug'
+    queryset = Categore.objects.all()
+    serializer_class = CategorySerializers
+    permission_classes = [IsAuthenticated]
+
+
+
+
 
 
 # class ListCreateView(ListCreateAPIView):
